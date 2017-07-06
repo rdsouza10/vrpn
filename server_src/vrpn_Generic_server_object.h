@@ -10,6 +10,7 @@ class vrpn_MainloopContainer;
 
 /// @todo find out from the NDI specs if there is a maximum;
 const int VRPN_GSO_MAX_NDI_POLARIS_RIGIDBODIES = 20; 
+const int VRPN_GSO_MAX_NDI_AURORA_RIGIDBODIES = 32;
 
 class VRPN_API vrpn_TAF_axis;
 class VRPN_API vrpn_IMU_Axis_Params;
@@ -118,6 +119,7 @@ protected:
     int setup_Button_NI_DIO24(char *&pch, char *line, FILE * /*config_file*/);
     int setup_Tracker_PhaseSpace(char *&pch, char *line,
                                  FILE * /*config_file*/);
+	int setup_Tracker_NDI_Aurora(char *&pch, char *line, FILE *config_file);
     int setup_Tracker_NDI_Polaris(char *&pch, char *line, FILE *config_file);
     int setup_Logger(char *&pch, char *line, FILE * /*config_file*/);
     int setup_ImageStream(char *&pch, char *line, FILE * /*config_file*/);

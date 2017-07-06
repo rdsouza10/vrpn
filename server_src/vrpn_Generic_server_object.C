@@ -89,6 +89,7 @@
 #include "vrpn_Tracker_Liberty.h"   // for vrpn_Tracker_Liberty
 #include "vrpn_Tracker_LibertyHS.h" // for vrpn_Tracker_LibertyHS
 #include "vrpn_Tracker_MotionNode.h"
+#include "vrpn_Tracker_NDI_Aurora.h" //vrpn Tracker for NDI Aurora
 #include "vrpn_Tracker_NDI_Polaris.h" // for vrpn_Tracker_NDI_Polaris
 #include "vrpn_Tracker_NovintFalcon.h"
 #include "vrpn_Tracker_OSVRHackerDevKit.h" // for vrpn_Tracker_OSVRHackerDevKit
@@ -3616,6 +3617,60 @@ int vrpn_Generic_Server_Object::setup_Tracker_ThalmicLabsMyo(char * &pch, char *
 #endif
   return 0;  // successful completion
 }
+
+int vrpn_Generic_Server_Object::setup_Tracker_NDI_Aurora(char *&,
+	char *line,
+	FILE *config_file)
+{
+	char trackerName[LINESIZE];
+	char device[LINESIZE];
+	int numRigidBodies;
+	char *rigidBodyFileNames[VRPN_GSO_MAX_NDI_AURORA_RIGIDBODIES];
+
+	// get tracker name and device
+	if (sscanf(line, "vrpn_Tracker_NDI_Aurora %s %s %d", trackerName, device,
+		&numRigidBodies) < 3) {
+		fprintf(stderr, "Bad vrpn_Tracker_NDI_Aurora line: %s\n", line);
+		return -1;
+	}
+	printf("DEBUG Tracker_NDI_Aurora: num of rigidbodies %d\n",
+		numRigidBodies);
+
+	// parse the filename for each rigid body
+	int rbNum;
+	for (rbNum = 0; rbNum < numRigidBodies; rbNum++) {
+		if (fgets(line, LINESIZE, config_file) ==
+			NULL) { // advance to next line of config file
+			perror("NDI_Aurora RigidBody can't read line!");
+			return -1;
+		}
+		rigidBodyFileNames[rbNum] =
+			new char[LINESIZE]; // allocate string for filename
+		if (sscanf(line, "%s", rigidBodyFileNames[rbNum]) != 1) {
+			fprintf(stderr, "Tracker_NDI_Aurora: error reading .rom filename "
+				"#%d from config file in line: %s\n",
+				rbNum, line);
+			return -1;
+		}
+		else {
+			printf("DEBUG Tracker_NDI_Aurora: filename >%s<\n",
+				rigidBodyFileNames[rbNum]);
+		}
+	}
+
+	_devices->add(new vrpn_Tracker_NDI_Aurora(
+		trackerName, connection, device, numRigidBodies,
+		(const char **)rigidBodyFileNames));
+
+	// free the .rom filename strings
+	for (rbNum = 0; rbNum < numRigidBodies; rbNum++) {
+		delete[](rigidBodyFileNames[rbNum]);
+	}
+	return (0); // success
+}
+
+
+
 
 int vrpn_Generic_Server_Object::setup_Tracker_NDI_Polaris(char *&,
                                                           char *line,

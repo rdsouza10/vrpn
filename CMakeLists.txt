@@ -1137,6 +1137,7 @@ set(VRPN_SERVER_SOURCES
 	vrpn_Tracker_JsonNet.C
 	vrpn_Tracker_Liberty.C
 	vrpn_Tracker_MotionNode.C
+    vrpn_Tracker_NDI_Aurora.C
 	vrpn_Tracker_NDI_Polaris.C
 	vrpn_Tracker_NovintFalcon.C
 	vrpn_Tracker_OSVRHackerDevKit.C
@@ -1250,6 +1251,7 @@ set(VRPN_SERVER_PUBLIC_HEADERS
 	vrpn_Tracker_JsonNet.h
 	vrpn_Tracker_Liberty.h
 	vrpn_Tracker_MotionNode.h
+    vrpn_Tracker_NDI_Aurora.h
 	vrpn_Tracker_NDI_Polaris.h
 	vrpn_Tracker_NovintFalcon.h
 	vrpn_Tracker_OSVRHackerDevKit.h
